@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -38,6 +39,7 @@ import model.Produto;
 import model.UltimoLogin;
 import controller.BancoController;
 import controller.PessoaController;
+import controller.ProdutoController;
 
 public class home extends JFrame {
 
@@ -48,7 +50,7 @@ public class home extends JFrame {
     private final UsuarioController usuarioController = new UsuarioController();
     private final BancoController bancoController = new BancoController();
     private final PessoaController pessoaController = new PessoaController();
-    private final EstoqueController estoqueController = new EstoqueController();
+    private final ProdutoController produtoController = new ProdutoController();
     private Color fundo = new Color(245, 247, 250);
     private Color azul = new Color(41, 128, 185);
     private Color cinzaEscuro = new Color(52, 73, 94);
@@ -59,7 +61,7 @@ public class home extends JFrame {
     private DefaultTableModel modeloTabelaUsuarios;
     private DefaultTableModel modeloTabelaBanco;
     private DefaultTableModel modeloTabelaEstoque;
-    private final static MenuGerais utilitario = new MenuGerais();
+
     
     public home(Usuario usuario) {
     	this.usuarioLogado = usuario;
@@ -126,9 +128,11 @@ public class home extends JFrame {
         JLabel lblData = new JLabel(
         		data + " " + hora
         );
-
-        lblData.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-
+    
+       
+        lblData.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblData.setBounds(1200, 50, 200, 10);
+        
         painelUsuario.add(lblUsuario);
         painelUsuario.add(Box.createVerticalStrut(5));
         painelUsuario.add(lblData);
@@ -430,7 +434,7 @@ public class home extends JFrame {
 
 private void atualizarTabelaEstoque() {
 	modeloTabelaEstoque.setRowCount(0);
-	for (Produto p : estoqueController.listarEstoque()) {
+	for (Produto p : produtoController.listarEstoque()) {
 		modeloTabelaEstoque.addRow(new Object[] {
 				p.getNome(),
 				p.getQuantidade()

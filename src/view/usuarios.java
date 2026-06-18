@@ -1,5 +1,8 @@
 package view;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Properties;
 import javax.mail.Authenticator;
@@ -13,6 +16,8 @@ import javax.mail.internet.MimeMessage;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
+
 import controller.GrupoController;
 import controller.UltimoLoginController;
 import controller.UsuarioController;
@@ -47,6 +52,7 @@ public class usuarios extends JFrame {
     private JButton btnCancelar;
     private JButton btnAdicionar;
 	private static Usuario usuarioLogado;
+	private JButton btnExcluir;
 
     public usuarios(Usuario usuarioLogado) {
     	this.usuarioLogado = usuarioLogado;
@@ -93,10 +99,23 @@ public class usuarios extends JFrame {
         JLabel lblNome = new JLabel("Nome");
         lblNome.setBounds(100, 55, 80, 20);
         contentPane.add(lblNome);
+       
 
-        txtNome = new JTextField();
-        txtNome.setBounds(100, 75, 120, 25);
-        contentPane.add(txtNome);
+	        txtNome = new JTextField();
+	        txtNome.setBounds(100, 75, 120, 25);
+	        contentPane.add(txtNome);
+			
+	
+	        txtNome.addKeyListener(new java.awt.event.KeyAdapter() {
+	            public void keyTyped(java.awt.event.KeyEvent e) {
+	                char c = e.getKeyChar();
+	                // Se NÃO for letra, cancela o clique
+	                if (!Character.isLetter(c) && c != '\b') {
+	                    e.consume();
+	                }
+	            }
+	        });
+
 
         JLabel lblFuncao = new JLabel("Função");
         lblFuncao.setBounds(230, 55, 80, 20);
@@ -127,29 +146,50 @@ public class usuarios extends JFrame {
         lblCpf.setBounds(690, 55, 80, 20);
         contentPane.add(lblCpf);
 
-        txtCpf = new JTextField();
-        txtCpf.setBounds(690, 75, 90, 25);
-        contentPane.add(txtCpf);
+        try {
+			MaskFormatter mask = new MaskFormatter("###.###.###-##");
+			mask.setPlaceholderCharacter('_');
+			  txtCpf = new JFormattedTextField(mask);
+		        txtCpf.setBounds(690, 75, 90, 25);
+		        contentPane.add(txtCpf);
 
+    } catch (ParseException e) {
+		e.printStackTrace();
+    }
+	
+
+      
         JButton btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.setBounds(10, 115, 100, 30);
+        btnFiltrar.setBounds(10, 115, 120, 30);
+    	btnFiltrar.setBackground(new Color(52,122,182));
+    	btnFiltrar.setForeground(Color.WHITE);
+    	btnFiltrar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         contentPane.add(btnFiltrar);
         btnFiltrar.addActionListener(e -> atualizarTabela());
 
         btnAdicionar = new JButton("Adicionar");
-        btnAdicionar.setBounds(10, 155, 100, 30);
+        btnAdicionar.setBounds(10, 155, 120, 30);
         contentPane.add(btnAdicionar);
+        btnAdicionar.setBackground(new Color(52,122,182));
+        btnAdicionar.setForeground(Color.WHITE);
+        btnAdicionar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnAdicionar.addActionListener(e -> criarUsuario());
 
         JButton btnEditar = new JButton("Editar");
-        btnEditar.setBounds(120, 155, 100, 30);
+        btnEditar.setBounds(140, 155, 120, 30);
+        btnEditar.setBackground(new Color(52,122,182));
+        btnEditar.setForeground(Color.WHITE);
+        btnEditar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         contentPane.add(btnEditar);
         btnEditar.addActionListener(e -> carregarParaEdicao());
 
 
-        JButton btnExcluir = new JButton("Excluir");
-        btnExcluir.setBounds(230, 155, 100, 30);
+         btnExcluir = new JButton("Excluir");
+        btnExcluir.setBounds(270, 155, 120, 30);
         contentPane.add(btnExcluir);
+        btnExcluir.setBackground(new Color(52,122,182));
+        btnExcluir.setForeground(Color.WHITE);
+        btnExcluir.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnExcluir.addActionListener(e -> excluirUsuario());
 
         JScrollPane scrollPane = new JScrollPane();
@@ -174,31 +214,37 @@ public class usuarios extends JFrame {
         scrollPane.setViewportView(table);
         
         txtSenha = new JTextField();
-        txtSenha.setBounds(359, 131, 150, 25);
+        txtSenha.setBounds(420, 131, 150, 25);
         contentPane.add(txtSenha);
         
         JLabel lblSenha = new JLabel("Senha");
-        lblSenha.setBounds(359, 111, 80, 20);
+        lblSenha.setBounds(420, 111, 80, 20);
         contentPane.add(lblSenha);
         
         txtSenha2 = new JTextField();
-        txtSenha2.setBounds(530, 131, 150, 25);
+        txtSenha2.setBounds(590, 131, 150, 25);
         contentPane.add(txtSenha2);
         
         JLabel lblConfirmarSenha = new JLabel("Confirmar Senha");
-        lblConfirmarSenha.setBounds(530, 111, 150, 20);
+        lblConfirmarSenha.setBounds(590, 111, 150, 20);
         contentPane.add(lblConfirmarSenha);
         
         btnSalvar = new JButton("Salvar");
-        btnSalvar.setBounds(120, 115, 100, 30);
+        btnSalvar.setBounds(140, 115, 120, 30);
         contentPane.add(btnSalvar);
+        btnSalvar.setBackground(new Color(52,122,182));
+        btnSalvar.setForeground(Color.WHITE);
+        btnSalvar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnSalvar.setVisible(false);
         btnSalvar.addActionListener(e -> salvarUsuario());
 
         
         btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBounds(230, 115, 100, 30);
+        btnCancelar.setBounds(270, 115, 120, 30);
         contentPane.add(btnCancelar);
+        btnCancelar.setBackground(new Color(52,122,182));
+        btnCancelar.setForeground(Color.WHITE);
+        btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnCancelar.setVisible(false);
         btnCancelar.addActionListener(e -> cancelar());
 
@@ -290,6 +336,7 @@ public class usuarios extends JFrame {
 		btnAdicionar.setVisible(false);
 		txtSenha.setEditable(false);
 		txtSenha2.setEditable(false);
+		btnExcluir.setVisible(false);
 		idSelecionado = (int) table.getValueAt(linha, 0);
 		Usuario u = controller.buscarPorId(idSelecionado);
 		txtCodigo.setText(String.valueOf(u.getId()));
@@ -394,6 +441,7 @@ public class usuarios extends JFrame {
 		btnSalvar.setVisible(false);
 		btnCancelar.setVisible(false);
 		btnAdicionar.setVisible(true);
+		btnExcluir.setVisible(true);
 		limparCampos();
 	}
 

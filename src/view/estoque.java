@@ -3,9 +3,11 @@ package view;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -15,12 +17,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 import controller.EstoqueController;
+import controller.ProdutoController;
 import model.Produto;
 import model.Usuario;
 import utilitarios.MenuGerais;
 
 import java.awt.Font;
 import java.awt.Image;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
@@ -33,7 +39,7 @@ public class estoque extends JFrame {
     private JTextField txtQuantidade;
     private JTable table;
     private DefaultTableModel modeloTabela;
-    private EstoqueController controller = new EstoqueController();
+    private ProdutoController controller = new ProdutoController();
     private int idSelecionado;
 	private Usuario usuarioLogado;
 
@@ -53,13 +59,28 @@ public class estoque extends JFrame {
 		setContentPane(contentPane);
 
 		setJMenuBar(MenuGerais.criarMenu(this, usuarioLogado));
+		JPanel header = new JPanel();
+		header.setLayout(null);
+		header.setBackground(Color.WHITE);
+		header.setBounds(0, 0, 1920, 95);
 
-        JPanel header = new JPanel();
-        header.setLayout(null);
-        header.setBackground(Color.WHITE);
-        header.setBounds(28, 0, 1090, 47);
+		header.setBorder(BorderFactory.createMatteBorder(
+				0, 0, 1, 0,
+				new Color(220,220,220)));
 
-        contentPane.add(header);
+		contentPane.add(header);
+
+		JLabel titulo = new JLabel("Estoque");
+		titulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
+		titulo.setForeground(new Color(33, 82, 118));
+		titulo.setBounds(101, 11, 500, 40);
+		header.add(titulo);
+
+		JLabel subtitulo = new JLabel("Controle de estoque");
+		subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		subtitulo.setForeground(Color.GRAY);
+		subtitulo.setBounds(101, 49, 400, 20);
+		header.add(subtitulo);
 
     											
         JLabel lblProduto = new JLabel("Produto"); 
@@ -109,6 +130,25 @@ public class estoque extends JFrame {
         
         estilizarBotao(btnFiltrar, new Color(52,122,182));
         estilizarBotao(btnEditar, new Color(52,122,182));
+        
+        
+    	JLabel usuario = new JLabel("Usuário: " + usuarioLogado.getNome());
+		usuario.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		usuario.setForeground(new Color(50,50,50));
+		usuario.setBounds(1550, 25, 250, 25);
+
+		header.add(usuario);
+
+
+        String data = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String hora = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+        JLabel lblData = new JLabel(
+        		data + " " + hora);
+		lblData.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblData.setForeground(Color.GRAY);
+		lblData.setBounds(1550, 50, 250, 20);
+
+		header.add(lblData);
        
 
         modeloTabela = new DefaultTableModel() {
@@ -147,17 +187,7 @@ public class estoque extends JFrame {
         lblLogo.setIcon(new ImageIcon(img));
 		header.add(lblLogo);
 		
-		JLabel lblNewLabel = new JLabel("Controle de Estoque");
-		lblNewLabel.setForeground(new Color(0, 64, 128));
-		lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		lblNewLabel.setBounds(75, 0, 264, 41);
-		header.add(lblNewLabel);
-                
-        JLabel lblNewLabel_1 = new JLabel("Controle de Estoque");
-        lblNewLabel_1.setForeground(new Color(0, 64, 128));
-        lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        lblNewLabel_1.setBounds(71, 8, 257, 25);
-        contentPane.add(lblNewLabel_1);
+	
         
         JPanel panel = new JPanel();
         panel.setBackground(new Color(52,122,182));
@@ -212,8 +242,17 @@ public class estoque extends JFrame {
     }
 
     private void abrirMovimentacoes() {
-    new movimentacao(usuarioLogado).setVisible(true);;
-    
-    }
+        int linha = table.getSelectedRow();
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Selecione um produto!");
+            return;
+        }
 
-}
+        String nomeSelecionado = (String) table.getValueAt(linha, 0);
+        Produto produto = controller.buscarProdutoPorNome(nomeSelecionado);
+
+        new movimentacao(usuarioLogado, produto).setVisible(true);
+    
+   
+    }
+    }

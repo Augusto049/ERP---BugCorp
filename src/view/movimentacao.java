@@ -40,8 +40,8 @@ public class movimentacao extends JFrame {
 	private JTextField textFieldQuantidade;
 	private JTextField textFieldValorMovimentado;
 	private JTable table_1;
-	private JComboBox<Produto> comboBoxProduto;
-	private JComboBox<String> comboBoxUnidadeMedida;
+	private JTextField txtProduto;
+	private JTextField UnidadeMedida;
 	private JComboBox<String> comboBoxColuna; // NOVO
 	private JTextField textField;
 	private JFormattedTextField formattedTextField;
@@ -51,10 +51,14 @@ public class movimentacao extends JFrame {
 	private DefaultTableModel modeloTabela;
 	private JTextField textFieldFiltro;
 	private TableRowSorter<DefaultTableModel> sorter;
+	private Produto produto;
 	
 	
 
-	public movimentacao(Usuario usuario) {
+	public movimentacao(Usuario usuario, Produto produto) {
+	
+		
+		this.produto = produto;
 		usuarioLogado = usuario;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 779, 597);
@@ -70,19 +74,12 @@ public class movimentacao extends JFrame {
 		lblproduto.setBounds(10, 49, 86, 20);
 		getContentPane().add(lblproduto);
 
-		comboBoxProduto = new JComboBox<>();
-		comboBoxProduto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				calcularTotal();
-				textField.setText("");
-				Produto p = (Produto) comboBoxProduto.getSelectedItem();
-				if (p != null) {
-					textField.setText(p.getUnidade());
-				}
-			}
-		});
-		comboBoxProduto.setBounds(10, 72, 163, 22);
-		contentPane.add(comboBoxProduto);
+		txtProduto = new JTextField();
+		txtProduto.setEditable(false);
+		txtProduto.setBounds(10, 72, 163, 22);
+		contentPane.add(txtProduto);
+		txtProduto.setText(produto.getNome());
+		
 
 		// ── Quantidade ───────────────────────────────────────────
 		JLabel lblquantidade = new JLabel("Quantidade");
@@ -90,30 +87,36 @@ public class movimentacao extends JFrame {
 		contentPane.add(lblquantidade);
 
 		textFieldQuantidade = new JTextField();
-		textFieldQuantidade.setText("1");
+		textFieldQuantidade.setText(String.valueOf(produto.getQuantidade()));
 		textFieldQuantidade.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				calcularTotal();
+//				calcularTotal();
 			}
 		});
 		textFieldQuantidade.setColumns(10);
 		textFieldQuantidade.setBounds(183, 73, 63, 20);
 		contentPane.add(textFieldQuantidade);
+		textFieldQuantidade.setEditable(false);
 
 		// ── Unidade de medida ────────────────────────────────────
 		JLabel lblUnidade_de_medida = new JLabel("Unidade de medida");
 		lblUnidade_de_medida.setBounds(267, 52, 115, 14);
 		contentPane.add(lblUnidade_de_medida);
 
+		
 		textField = new JTextField();
 		textField.setEditable(false);
 		textField.setColumns(10);
 		textField.setBounds(267, 73, 104, 20);
+		textField.setText(produto.getUnidade());
 		contentPane.add(textField);
 
-		comboBoxUnidadeMedida = new JComboBox<>();
-		comboBoxUnidadeMedida.setBounds(268, 72, 94, 22);
+
+
+	
+	
+		
 
 		// ── Valor movimentado ────────────────────────────────────
 		JLabel lblvalor_movimentado = new JLabel("Valor movimentado");
@@ -130,11 +133,13 @@ public class movimentacao extends JFrame {
 		JLabel lblData = new JLabel("Data");
 		lblData.setBounds(534, 52, 115, 14);
 		contentPane.add(lblData);
+		
 
 		try {
 			MaskFormatter mask = new MaskFormatter("##/##/####");
 			mask.setPlaceholderCharacter('_');
 			formattedTextField = new JFormattedTextField(mask);
+			formattedTextField.setEditable(false);
 			formattedTextField.setBounds(534, 73, 68, 20);
 			contentPane.add(formattedTextField);
 		} catch (ParseException e) {
@@ -215,55 +220,58 @@ public class movimentacao extends JFrame {
 		table_1.getTableHeader().setReorderingAllowed(false);
 
 		// ── Botões ───────────────────────────────────────────────
-		JButton btnAdicionar = new JButton("Adicionar");
-		btnAdicionar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String qtd = textFieldQuantidade.getText();
-				String unidade = textField.getText();
-				String valor = textFieldValorMovimentado.getText();
-				String data = formattedTextField.getText();
+//		JButton btnAdicionar = new JButton("Adicionar");
+//		btnAdicionar.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				String qtd = textFieldQuantidade.getText();
+//				String unidade = textField.getText();
+//				String valor = textFieldValorMovimentado.getText();
+//				String data = formattedTextField.getText();
+//
+//				if (comboBoxProduto.getSelectedIndex() > -1 && !qtd.isEmpty() && !data.contains("_")) {
+//					Produto produto = (Produto) comboBoxProduto.getSelectedItem();
+//
+//					if (idSelecionado > 0) {
+//						controller.atualizarMovimentacao(idSelecionado, Double.parseDouble(qtd), produto.getId(),
+//								unidade, Double.parseDouble(valor), data, 1);
+//					} else {
+//						controller.salvarMovimentacao(Double.parseDouble(qtd), produto.getId(), unidade,
+//								Double.parseDouble(valor), data, 1);
+//					}
+//					idSelecionado = 0;
+//					atualizarTabela();
+//				}
+//			}
+//		});
+//		btnAdicionar.setBounds(10, 119, 89, 23);
+//		contentPane.add(btnAdicionar);
+//
+//		JButton btnEditar = new JButton("Editar");
+//		btnEditar.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				carregarParaEdicao();
+//			}
+//		});
+//		btnEditar.setBounds(110, 119, 89, 23);
+//		contentPane.add(btnEditar);
+//
+//		JButton btnExluir = new JButton("Excluir");
+//		btnExluir.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				excluir();
+//			}
+//		});
+//		btnExluir.setBounds(214, 119, 89, 23);
+//		contentPane.add(btnExluir);
 
-				if (comboBoxProduto.getSelectedIndex() > -1 && !qtd.isEmpty() && !data.contains("_")) {
-					Produto produto = (Produto) comboBoxProduto.getSelectedItem();
-
-					if (idSelecionado > 0) {
-						controller.atualizarMovimentacao(idSelecionado, Double.parseDouble(qtd), produto.getId(),
-								unidade, Double.parseDouble(valor), data, 1);
-					} else {
-						controller.salvarMovimentacao(Double.parseDouble(qtd), produto.getId(), unidade,
-								Double.parseDouble(valor), data, 1);
-					}
-					idSelecionado = 0;
-					atualizarTabela();
-				}
-			}
-		});
-		btnAdicionar.setBounds(10, 119, 89, 23);
-		contentPane.add(btnAdicionar);
-
-		JButton btnEditar = new JButton("Editar");
-		btnEditar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				carregarParaEdicao();
-			}
-		});
-		btnEditar.setBounds(110, 119, 89, 23);
-		contentPane.add(btnEditar);
-
-		JButton btnExluir = new JButton("Excluir");
-		btnExluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				excluir();
-			}
-		});
-		btnExluir.setBounds(214, 119, 89, 23);
-		contentPane.add(btnExluir);
-
-		carregarProdutos();
-		comboBoxProduto.setSelectedIndex(-1);
-		comboBoxUnidadeMedida.setSelectedIndex(-1);
+		
+//		comboBoxProduto.setSelectedIndex(-1);
+//		comboBoxUnidadeMedida.setSelectedIndex(-1);
 		atualizarTabela();
+		criarComponentes();
+	
 	}
+	
 
 	// ALTERADO: recebe o índice da coluna (-1 = todas)
 	private void filtrarTabela(int coluna) {
@@ -277,75 +285,81 @@ public class movimentacao extends JFrame {
 				sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto, coluna));
 			}
 		}
+		
 	}
 
 	private void atualizarTabela() {
 		ProdutoDAO dao = new ProdutoDAO();
 		modeloTabela.setRowCount(0);
-		for (Movimentacao e : controller.listarMovimentacao()) {
-			String produto = dao.buscarPorId(e.getProduto()).getNome();
-			modeloTabela.addRow(new Object[] { e.getId(), produto, e.getQuantidade(), e.getUnidade_de_medida(),
+		for (Movimentacao e : controller.listarMovimentacao(produto.getId()))
+			
+		{ 
+
+			String nomeProduto = dao.buscarPorId(e.getProduto()).getNome();
+			modeloTabela.addRow(new Object[] { e.getId(), nomeProduto, e.getQuantidade(), e.getUnidade_de_medida(),
 					e.getValor_da_movimentacao(), e.getData() });
+
 		}
+		
 	}
 
-	private void excluir() {
-		int linha = table_1.getSelectedRow();
-		if (linha == -1) {
-			JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Selecione!");
-			return;
-		}
-		int id = (int) table_1.getValueAt(linha, 0);
-		controller.excluirMovimentacao(id);
-		JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Excluído!");
-		atualizarTabela();
-	}
+//	private void excluir() {
+//		int linha = table_1.getSelectedRow();
+//		if (linha == -1) {
+//			JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Selecione!");
+//			return;
+//		}
+//		int id = (int) table_1.getValueAt(linha, 0);
+//		controller.excluirMovimentacao(id);
+//		JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Excluído!");
+//		atualizarTabela();
+//	}
 
-	private void carregarParaEdicao() {
-		int linha = table_1.getSelectedRow();
-		if (linha == -1) {
-			JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Selecione uma movimentação!");
-			return;
-		}
-		idSelecionado = (int) table_1.getValueAt(linha, 0);
-		Movimentacao m = controller.buscarMovimentacao(idSelecionado);
+//	private void carregarParaEdicao() {
+//		int linha = table_1.getSelectedRow();
+//		if (linha == -1) {
+//			JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Selecione uma movimentação!");
+//			return;
+//		}
+//		idSelecionado = (int) table_1.getValueAt(linha, 0);
+//		Movimentacao m = controller.buscarMovimentacao(idSelecionado);
+//
+//		for (int i = 0; i < txtProduto.getItemCount(); i++) {
+//			Produto p = txtProduto.getItemAt(i);
+//			if (p.getId() == m.getProduto()) {
+//				txtProduto.setSelectedIndex(i);
+//				break;
+//			}
+//		}
+//		textFieldQuantidade.setText(String.valueOf(m.getQuantidade()));
+//		textField.setText(m.getUnidade_de_medida());
+//		textFieldValorMovimentado.setText(String.valueOf(m.getValor_da_movimentacao()));
+//		formattedTextField.setText(m.getData());
+//	}
 
-		for (int i = 0; i < comboBoxProduto.getItemCount(); i++) {
-			Produto p = comboBoxProduto.getItemAt(i);
-			if (p.getId() == m.getProduto()) {
-				comboBoxProduto.setSelectedIndex(i);
-				break;
-			}
-		}
-		textFieldQuantidade.setText(String.valueOf(m.getQuantidade()));
-		textField.setText(m.getUnidade_de_medida());
-		textFieldValorMovimentado.setText(String.valueOf(m.getValor_da_movimentacao()));
-		formattedTextField.setText(m.getData());
-	}
-
-	private void calcularTotal() {
-		String qtd = textFieldQuantidade.getText().trim();
-		textFieldValorMovimentado.setText("0");
-		double quantidade = 1.0;
-		if (qtd != null && !qtd.isEmpty()) {
-			quantidade = Double.parseDouble(qtd);
-		}
-		Produto p = (Produto) comboBoxProduto.getSelectedItem();
-		if (p != null) {
-			textFieldValorMovimentado.setText(String.valueOf(p.getValor() * quantidade));
-		}
-	}
-
-	private void carregarProdutos() {
-		ProdutoDAO dao = new ProdutoDAO();
-		List<Produto> produtos = dao.listar();
-		comboBoxProduto.removeAllItems();
-		for (Produto p : produtos) {
-			comboBoxProduto.addItem(p);
-		}
-	}
+//	private void calcularTotal() {
+//		String qtd = textFieldQuantidade.getText().trim();
+//		textFieldValorMovimentado.setText("0");
+//		double quantidade = 1.0;
+//		if (qtd != null && !qtd.isEmpty()) {
+//			quantidade = Double.parseDouble(qtd);
+//		}
+//		Produto p = (Produto)  Integer.parseInt(txtProduto.getText());;
+//		if (p != null) {
+//			textFieldValorMovimentado.setText(String.valueOf(p.getValor() * quantidade));
+//		}
+	
+//
+//	private void carregarProdutos() {
+//		ProdutoDAO dao = new ProdutoDAO();
+//		List<Produto> produtos = dao.listar();
+//		JTextField.removeAllItems();
+//		for (Produto p : produtos) {
+//			JTextField.addItem(p);
+//		}
+	
 
 	private void criarComponentes() {
-		MenuGerais.aplicar(this, usuarioLogado);
+		setJMenuBar(MenuGerais.criarMenu(this, usuarioLogado));
 	}
 	}

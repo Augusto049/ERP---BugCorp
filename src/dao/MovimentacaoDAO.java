@@ -75,34 +75,34 @@ public class MovimentacaoDAO {
         }
     }
 
-    public List<Movimentacao> listar() {
-        List<Movimentacao> lista = new ArrayList<>();
-        String sql = "SELECT * FROM movimentacoes";
+    public List<Movimentacao> listar(int id) {
+    	List<Movimentacao> lista = new ArrayList<>();
+    	String sql = "SELECT * FROM movimentacoes JOIN produto ON movimentacoes.id_produto = produto.id WHERE movimentacoes.id_produto = ? ORDER BY data DESC";
 
-        try (Connection conn = initConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+    	try (Connection conn = initConnection();
+    	     PreparedStatement stmt = conn.prepareStatement(sql)) {  // ✅ PreparedStatement
 
-            while (rs.next()) {
-            	Movimentacao g = new Movimentacao();
-            	  g.setId(rs.getInt("id"));
-                  g.setQuantidade(rs.getDouble("quantidade"));
-                  g.setProduto(rs.getInt("id_produto"));
-                  g.setUnidade_de_medida(rs.getString("unidade_de_medida"));
-                  g.setValor_da_movimentacao(rs.getDouble("valor_da_movimentacao")); 
-                  g.setData(rs.getString("data"));// ADICIONADO
-                  g.setIdUsuario(rs.getInt("id_usuario"));
-                  lista.add(g);
-            }
+    	    stmt.setInt(1, id);  // ✅ antes do executeQuery
+    	    ResultSet rs = stmt.executeQuery();
+    	    
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    	    while (rs.next()) {
+    	        Movimentacao g = new Movimentacao();
+    	        g.setId(rs.getInt("id"));
+    	        g.setQuantidade(rs.getDouble("quantidade"));
+    	        g.setProduto(rs.getInt("id_produto"));
+    	        g.setUnidade_de_medida(rs.getString("unidade_de_medida"));
+    	        g.setValor_da_movimentacao(rs.getDouble("valor_da_movimentacao"));
+    	        g.setData(rs.getString("data"));
+    	        g.setIdUsuario(rs.getInt("id_usuario"));
+    	        lista.add(g);
+    	    }
 
-        
-    
-        return lista;
-    }
+    	} catch (Exception e) {
+    	    e.printStackTrace();
+    	}
+
+    	return lista; }
     
     public Movimentacao buscarPorId(int id) {
 

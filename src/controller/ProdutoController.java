@@ -71,4 +71,16 @@ public class ProdutoController {
         }
         return dados;
     }
+    public List<Produto> listarEstoque() {
+        return produtoDAO.listarEstoque();
+    
+    }
+    public Produto buscarProdutoPorNome(String nome) {
+        for (Produto p : listarEstoque()) {
+            if (p.getNome().equals(nome)) {
+                return p;
+            }
+        }
+        return null;
+    }
 }

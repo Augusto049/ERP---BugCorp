@@ -188,4 +188,40 @@ public class PessoaDAO {
 
         return 0;
     }
-}
+    public Pessoa buscarPorCnpjcpf(String cnpjcpf) {
+        String sql = "SELECT * FROM pessoa WHERE cnpj_ou_cpf = ?";
+
+        try (Connection conn = initConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, cnpjcpf);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Pessoa pessoa = new Pessoa();
+                pessoa.setId(rs.getInt("id"));
+                pessoa.setNome(rs.getString("nome"));
+                pessoa.setCnpj_ou_cpf(rs.getString("cnpj_ou_cpf"));
+                pessoa.setCEP(rs.getString("cep"));
+                pessoa.setEstado(rs.getString("estado"));
+                pessoa.setCidade(rs.getString("cidade"));
+                pessoa.setBairro(rs.getString("bairro"));
+                pessoa.setRua(rs.getString("rua"));
+                pessoa.setNumero(rs.getString("numero"));
+                pessoa.setEmail(rs.getString("email"));
+                pessoa.setTelefone(rs.getString("telefone"));
+                pessoa.setInscricao_estadual(rs.getString("inscricao_estadual"));
+                // CORRIGIDO: estava lendo limite_credito para setTipo
+                pessoa.setTipo(rs.getString("tipo"));
+                pessoa.setLimite_credito(rs.getString("limite_credito"));
+                return pessoa;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    }

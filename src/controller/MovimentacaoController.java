@@ -41,17 +41,17 @@ public class MovimentacaoController {
     	movimentacaoDAO.excluir(id);
     }
 
-    public List<Movimentacao> listarMovimentacao() {
-        return movimentacaoDAO.listar();
+    public List<Movimentacao> listarMovimentacao(int id) {
+        return movimentacaoDAO.listar(id);
     }
 
     public Movimentacao buscarMovimentacao(int id) {
         return movimentacaoDAO.buscarPorId(id);
     }
 
-    public List<Object[]> listarParaTabela() {
+    public List<Object[]> listarParaTabela(int id) {
         List<Object[]> dados = new java.util.ArrayList<>();
-        List<Movimentacao> lista = movimentacaoDAO.listar();
+        List<Movimentacao> lista = movimentacaoDAO.listar(id);
         for (Movimentacao e : lista) {
             dados.add(new Object[]{
                 e.getId(),

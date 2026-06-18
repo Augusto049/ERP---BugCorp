@@ -23,7 +23,7 @@ import view.condicao_pagamento;
 import view.estoque;
 import view.notas_saida;
 import view.locais;
-
+import view.home;
 public class MenuGerais {
 
 
@@ -36,6 +36,12 @@ public class MenuGerais {
          menuBar.add(menuGerais);
          JMenu menuNotas = new JMenu("Notas Fiscais");
          menuBar.add(menuNotas);
+         
+         JMenuItem itemHome = new JMenuItem("Home");
+         itemHome.addActionListener(e -> {
+         telaAtual.dispose();
+         new home(usuarioLogado).setVisible(true);
+         });
 
          JMenuItem itemUsuario = new JMenuItem("Usuário");
          itemUsuario.addActionListener(e -> {
@@ -104,6 +110,7 @@ public class MenuGerais {
              new notas_saida(usuarioLogado).setVisible(true);
          });
          
+         menuGerais.add(itemHome);
          menuGerais.add(itemUsuario);
          menuGerais.add(itemGrupo);
          menuGerais.add(itemPessoa);

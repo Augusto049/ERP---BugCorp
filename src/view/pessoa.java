@@ -21,6 +21,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
@@ -50,27 +53,93 @@ public class pessoa extends JFrame {
         setJMenuBar(MenuGerais.criarMenu(this, usuarioLogado));
 
         JButton btnAdicionar = new JButton("Adicionar");
-        btnAdicionar.setBounds(10, 129, 89, 23);
+        btnAdicionar.setBounds(10, 129, 130, 23);
+        btnAdicionar.setBorder(new EmptyBorder(10,20,10,20));
+		btnAdicionar.setBackground(new Color(52,122,182));
+		btnAdicionar.setForeground(Color.WHITE);
+		btnAdicionar.setFont(new Font("Segoe UI", Font.BOLD, 15));
+
         getContentPane().add(btnAdicionar);
         btnAdicionar.addActionListener(e -> abrirPopupCadastroCompleto(false));
 
         JButton btnExcluir = new JButton("Excluir");
-        btnExcluir.setBounds(109, 129, 89, 23);
+        btnExcluir.setBounds(150, 129, 130, 23);
+        btnExcluir.setBorder(new EmptyBorder(10,20,10,20));
+        btnExcluir.setBackground(new Color(52,122,182));
+        btnExcluir.setForeground(Color.WHITE);
+        btnExcluir.setFont(new Font("Segoe UI", Font.BOLD, 15));
         getContentPane().add(btnExcluir);
         btnExcluir.addActionListener(e -> excluirPessoa());
 
-        JButton btnDetalhes = new JButton("▶ Ver detalhes");
-        btnDetalhes.setBounds(208, 129, 130, 23);
+        JButton btnDetalhes = new JButton("Ver detalhes");
+        btnDetalhes.setBounds(290, 129, 130, 23);
+        btnDetalhes.setBorder(new EmptyBorder(10,20,10,20));
+        btnDetalhes.setBackground(new Color(52,122,182));
+        btnDetalhes.setForeground(Color.WHITE);
+        btnDetalhes.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        
         getContentPane().add(btnDetalhes);
         btnDetalhes.addActionListener(e -> {
+        	
             if (idSelecionado == 0) { JOptionPane.showMessageDialog(this, "Selecione uma pessoa na tabela!"); return; }
             abrirPopupDetalhes();
         });
 
-        JButton btnCadastrarInformacoes = new JButton("Cadastrar Informações");
-        btnCadastrarInformacoes.setBounds(10, 41, 200, 22);
-        contentPane.add(btnCadastrarInformacoes);
-        btnCadastrarInformacoes.addActionListener(e -> abrirPopupCadastroCompleto(false));
+        JPanel header = new JPanel();
+		header.setLayout(null);
+		header.setBackground(Color.WHITE);
+		header.setBounds(0, 0, 760, 95);
+
+		header.setBorder(BorderFactory.createMatteBorder(
+				0, 0, 1, 0,
+				new Color(220,220,220)));
+
+		contentPane.add(header);
+		
+		
+
+		JLabel titulo = new JLabel("Cadastro de usúarios");
+		titulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
+		titulo.setForeground(new Color(33, 82, 118));
+		titulo.setBounds(128, 0, 500, 40);
+
+		header.add(titulo);
+
+		
+
+		JLabel usuario1 = new JLabel("Usuário: " + usuarioLogado.getNome());
+		usuario1.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		usuario1.setForeground(new Color(50,50,50));
+		usuario1.setBounds(600, 25, 250, 25);
+
+		header.add(usuario1);
+
+
+        String data = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String hora = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+        JLabel lblData = new JLabel(
+        		data + " " + hora);
+		lblData.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblData.setForeground(Color.GRAY);
+		lblData.setBounds(600, 50, 250, 20);
+
+		header.add(lblData);
+		
+		JLabel lblLogo = new JLabel("");
+		lblLogo.setBounds(27, 7, 75, 62);
+		ImageIcon icon = new ImageIcon("img/logo.png");
+
+        Image img = icon.getImage().getScaledInstance(
+                70,
+                70,
+                Image.SCALE_SMOOTH
+        );
+
+        lblLogo.setIcon(new ImageIcon(img));
+		header.add(lblLogo);
+
+        
+      
 
         modeloTabela = new DefaultTableModel() {
             @Override
@@ -92,11 +161,12 @@ public class pessoa extends JFrame {
         });
 
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(10, 164, 735, 355);
+        scrollPane.setBounds(10, 164, 750, 355);
         contentPane.add(scrollPane);
 
         atualizarTabela();
     }
+    
 
     // -----------------------------------------------------------------------
     // Popup: Cadastro Completo — lado a lado
@@ -296,7 +366,15 @@ public class pessoa extends JFrame {
         JButton btnSalvar   = new JButton("Salvar");
         JButton btnCancelar = new JButton("Cancelar");
         btnSalvar.setBounds(680, 390, 110, 28);
+        btnSalvar.setBorder(new EmptyBorder(10,20,10,20));
+        btnSalvar.setBackground(new Color(52,122,182));
+        btnSalvar.setForeground(Color.WHITE);
+        btnSalvar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnCancelar.setBounds(800, 390, 110, 28);
+        btnCancelar.setBorder(new EmptyBorder(10,20,10,20));
+        btnCancelar.setBackground(new Color(52,122,182));
+        btnCancelar.setForeground(Color.WHITE);
+        btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         dialog.getContentPane().add(btnSalvar);
         dialog.getContentPane().add(btnCancelar);
 
@@ -343,12 +421,19 @@ public class pessoa extends JFrame {
             }
 
             String tipo = String.join(", ", tipos);
-
+            Pessoa cnpj = controller.buscarCnpj(cpf);
             if (modoEdicao && pe != null) {
                 controller.atualizarPessoa(idSelecionado, nome, cpf, email, tel, insc, lim, tipo,
                     cep, estado, cidade, bairro, rua, numero);
                 JOptionPane.showMessageDialog(dialog, "Pessoa atualizada com sucesso!");
-            } else {
+                
+            } else if(cnpj != null) {
+            System.out.println("deu boa");
+              JOptionPane.showMessageDialog(dialog, "Ja existe um cadastro com esse CNPJ ou CPF");
+            } else
+            {
+            	
+            	
                 controller.salvarPessoa(nome, cpf, email, tel, insc, lim, tipo);
                 List<Pessoa> lista = controller.listarPessoa();
                 if (!lista.isEmpty()) {
@@ -408,7 +493,8 @@ public class pessoa extends JFrame {
         painelPessoal.add(label("CNPJ/CPF:*", lx, y, h));
         JTextField txtCpf = field(p.getCnpj_ou_cpf(), fx, y, fw, h);
         adicionarFiltroSomenteNumeros(txtCpf);
-        painelPessoal.add(txtCpf); y += gap;
+        painelPessoal.add(txtCpf); y += gap ; 
+        txtCpf.setEditable(false);
 
         painelPessoal.add(label("Email:*", lx, y, h));
         JTextField txtEmail = field(p.getEmail(), fx, y, fw, h);
@@ -448,7 +534,11 @@ public class pessoa extends JFrame {
         chkTransportadora.setBounds(fx + 120, y, 130, h); painelPessoal.add(chkTransportadora); y += 30;
 
         JButton btnSalvarPessoal = new JButton("Salvar informações pessoais");
-        btnSalvarPessoal.setBounds(fx, y, 230, 28);
+        btnSalvarPessoal.setBounds(fx, y, 260, 28);
+        btnSalvarPessoal.setBorder(new EmptyBorder(10,20,10,20));
+        btnSalvarPessoal.setBackground(new Color(52,122,182));
+        btnSalvarPessoal.setForeground(Color.WHITE);
+        btnSalvarPessoal.setFont(new Font("Segoe UI", Font.BOLD, 15));
         painelPessoal.add(btnSalvarPessoal);
 
         btnSalvarPessoal.addActionListener(e -> {
@@ -516,6 +606,67 @@ public class pessoa extends JFrame {
         adicionarFiltroSomenteNumeros(txtNumero);
         painelEndereco.add(txtNumero); y += gap + 5;
 
+
+        
+        JPanel header = new JPanel();
+		header.setLayout(null);
+		header.setBackground(Color.WHITE);
+		header.setBounds(0, 0, 1920, 95);
+
+		header.setBorder(BorderFactory.createMatteBorder(
+				0, 0, 1, 0,
+				new Color(220,220,220)));
+
+		contentPane.add(header);
+		
+		
+
+		JLabel titulo = new JLabel("Cadastro de usúarios");
+		titulo.setFont(new Font("Segoe UI", Font.BOLD, 30));
+		titulo.setForeground(new Color(33, 82, 118));
+		titulo.setBounds(128, 0, 500, 40);
+
+		header.add(titulo);
+
+		JLabel subtitulo = new JLabel("Controle de usúarios");
+		subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		subtitulo.setForeground(Color.GRAY);
+		subtitulo.setBounds(128, 49, 300, 20);
+
+		header.add(subtitulo);
+
+		JLabel usuario1 = new JLabel("Usuário: " + usuarioLogado.getNome());
+		usuario1.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		usuario1.setForeground(new Color(50,50,50));
+		usuario1.setBounds(1550, 25, 250, 25);
+
+		header.add(usuario1);
+
+
+        String data = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String hora = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+        JLabel lblData = new JLabel(
+        		data + " " + hora);
+		lblData.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblData.setForeground(Color.GRAY);
+		lblData.setBounds(1550, 50, 250, 20);
+
+		header.add(lblData);
+		
+		JLabel lblLogo = new JLabel("");
+		lblLogo.setBounds(27, 7, 75, 62);
+		ImageIcon icon = new ImageIcon("img/logo.png");
+
+        Image img = icon.getImage().getScaledInstance(
+                70,
+                70,
+                Image.SCALE_SMOOTH
+        );
+
+        lblLogo.setIcon(new ImageIcon(img));
+		header.add(lblLogo);
+
+
         // Auto-preenchimento CEP
         txtCep.addFocusListener(new FocusAdapter() {
             @Override
@@ -541,6 +692,10 @@ public class pessoa extends JFrame {
 
         JButton btnSalvarEndereco = new JButton("Salvar endereço");
         btnSalvarEndereco.setBounds(fx, y, 180, 28);
+        btnSalvarEndereco.setBorder(new EmptyBorder(10,20,10,20));
+        btnSalvarEndereco.setBackground(new Color(52,122,182));
+        btnSalvarEndereco.setForeground(Color.WHITE);
+        btnSalvarEndereco.setFont(new Font("Segoe UI", Font.BOLD, 15));
         painelEndereco.add(btnSalvarEndereco);
 
         btnSalvarEndereco.addActionListener(e -> {
@@ -563,6 +718,10 @@ public class pessoa extends JFrame {
         abas.addTab("Endereço", painelEndereco);
 
         JButton btnFechar = new JButton("Fechar");
+        btnFechar.setBorder(new EmptyBorder(10,20,10,20));
+        btnFechar.setBackground(new Color(52,122,182));
+        btnFechar.setForeground(Color.WHITE);
+        btnFechar.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnFechar.addActionListener(e -> dialog.dispose());
         JPanel painelBotao = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         painelBotao.add(btnFechar);
@@ -641,7 +800,11 @@ public class pessoa extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        
+         
+        
         }
+   
     }
 
     // -----------------------------------------------------------------------

@@ -20,6 +20,9 @@ import utilitarios.MenuGerais;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -93,19 +96,23 @@ public class banco extends JFrame {
 
 		header.add(subtitulo);
 
-		JLabel usuario1 = new JLabel("Usuário: " + usuarioLogado);
+		JLabel usuario1 = new JLabel("Usuário: " + usuarioLogado.getNome());
 		usuario1.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		usuario1.setForeground(new Color(50,50,50));
 		usuario1.setBounds(1550, 25, 250, 25);
 
 		header.add(usuario1);
 
-		JLabel data = new JLabel("27/05/2026 18:48");
-		data.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		data.setForeground(Color.GRAY);
-		data.setBounds(1550, 50, 250, 20);
 
-		header.add(data);
+        String data = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        String hora = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+        JLabel lblData = new JLabel(
+        		data + " " + hora);
+		lblData.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblData.setForeground(Color.GRAY);
+		lblData.setBounds(1550, 50, 250, 20);
+
+		header.add(lblData);
 		
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setBounds(27, 7, 75, 62);

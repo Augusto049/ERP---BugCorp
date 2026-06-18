@@ -133,4 +133,35 @@ public class ProdutoDAO {
             e.printStackTrace();
         }
     }
+
+    public List<Produto> listarEstoque() {
+        List<Produto> lista = new ArrayList<>();
+
+        String sql =
+            "SELECT p.nome, p.marca, p.quantidade, p.unidade_de_medida, p.id FROM produto p ";
+           
+
+        try (Connection conn = initConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Produto p = new Produto();
+
+                p.setNome(rs.getString("nome"));
+                p.setMarca(rs.getString("marca"));
+                p.setQuantidade(rs.getDouble("quantidade"));
+                p.setUnidade(rs.getString("unidade_de_medida"));
+                p.setId(rs.getInt("id"));
+
+                lista.add(p);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+   
+    }
 }

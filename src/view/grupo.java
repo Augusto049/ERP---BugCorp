@@ -251,7 +251,7 @@ public class grupo extends JFrame {
 				)
 		);
 
-		txtCodigo.setBounds(20, 95, 140, 42);
+		txtCodigo.setBounds(20, 95, 140, 35);
 
 		cardFormulario.add(txtCodigo);
 

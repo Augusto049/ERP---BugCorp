@@ -87,4 +87,8 @@ public class PessoaController {
     public int contarPessoa() {
         return pessoaDAO.contarPessoa();
     }
+
+    public Pessoa buscarCnpj(String cnpj) {
+        return pessoaDAO.buscarPorCnpjcpf(cnpj);
+}
 }

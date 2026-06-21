@@ -58,8 +58,8 @@ public class enderecamento extends JFrame {
     public enderecamento(Usuario usuario) {
         usuarioLogado = usuario;
         setJMenuBar(MenuGerais.criarMenu(this, usuario));
-
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setBounds(100, 100, 779, 597);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Endereçamento");
 
@@ -220,22 +220,40 @@ public class enderecamento extends JFrame {
     private JPanel criarPainelCombo(JComboBox<String> combo, String tabela, String nomeCampo) {
         carregarCombo(combo, tabela);
 
+        // ── Botão "+" ────────────────────────────────────────────────────────
         JButton btnAdd = new JButton("+");
-        btnAdd.setBackground(COR_BOTAO);
-        btnAdd.setForeground(COR_TEXTO_BOTAO);
-        btnAdd.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnAdd.setFocusPainted(false);
-        btnAdd.setBorderPainted(false);
-        btnAdd.setOpaque(true);
-        btnAdd.setBorder(new EmptyBorder(2, 8, 2, 8));
-        btnAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnAdd.setToolTipText("Adicionar novo(a) " + nomeCampo);
+        estilizarBotaoCombo(btnAdd, "Adicionar novo(a) " + nomeCampo);
         btnAdd.addActionListener(e -> adicionarItemCombo(combo, nomeCampo, tabela));
 
+        // ── Botão "-" ────────────────────────────────────────────────────────
+        JButton btnInativar = new JButton("-");
+        estilizarBotaoCombo(btnInativar, "Inativar " + nomeCampo + " selecionado(a)");
+        btnInativar.addActionListener(e -> inativarItemCombo(combo, nomeCampo, tabela));
+
         JPanel painel = new JPanel(new BorderLayout(4, 0));
-        painel.add(combo,   BorderLayout.CENTER);
-        painel.add(btnAdd,  BorderLayout.EAST);
+        painel.add(combo,       BorderLayout.CENTER);
+        painel.add(btnAdd,      BorderLayout.EAST);
+
+        // Painel auxiliar para os dois botões ficarem juntos
+        JPanel painelBotoes = new JPanel(new GridLayout(1, 2, 2, 0));
+        painelBotoes.add(btnInativar);
+        painelBotoes.add(btnAdd);
+
+        painel.add(painelBotoes, BorderLayout.EAST);
         return painel;
+    }
+
+    // Estilo compartilhado para os botões + e -
+    private void estilizarBotaoCombo(JButton btn, String tooltip) {
+        btn.setBackground(COR_BOTAO);
+        btn.setForeground(COR_TEXTO_BOTAO);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setOpaque(true);
+        btn.setBorder(new EmptyBorder(2, 8, 2, 8));
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setToolTipText(tooltip);
     }
 
     // ════════════════════════════════════════════════════════════════════════
@@ -344,12 +362,22 @@ public class enderecamento extends JFrame {
             return;
         }
 
+        // ── Validação de duplicidade ─────────────────────────────────────────
+        if (controller.existeEndereco(produto, corredor, prateleira, setor)) {
+            JOptionPane.showMessageDialog(this,
+                    "O produto \"" + produto + "\" já está cadastrado neste\n" +
+                    "Corredor: " + corredor + " | Prateleira: " + prateleira + " | Setor: " + setor,
+                    "Endereço duplicado", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // ────────────────────────────────────────────────────────────────────
+
         controller.salvarEndereco(setor, corredor, prateleira, produto);
         JOptionPane.showMessageDialog(this, "Endereço salvo!");
         limparCampos();
         atualizarTabela();
     }
-
+    
     private void excluirEndereco() {
         int linha = table.getSelectedRow();
         if (linha == -1) {
@@ -366,6 +394,26 @@ public class enderecamento extends JFrame {
         controller.excluirEndereco(id);
         JOptionPane.showMessageDialog(this, "Endereço excluído!");
         atualizarTabela();
+    }
+    private void inativarItemCombo(JComboBox<String> combo, String nomeCampo, String tabela) {
+        String selecionado = (String) combo.getSelectedItem();
+
+        if (selecionado == null || selecionado.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Selecione um(a) " + nomeCampo + " para inativar!");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Deseja inativar " + nomeCampo + " \"" + selecionado + "\"?\n" +
+                "Ele não aparecerá mais na lista, mas os registros existentes serão mantidos.",
+                "Confirmar inativação", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        opcoesDAO.inativar(tabela, selecionado);
+        combo.removeItem(selecionado);
+
+        JOptionPane.showMessageDialog(this, nomeCampo + " \"" + selecionado + "\" inativado(a) com sucesso!");
     }
 
     private void limparCampos() {

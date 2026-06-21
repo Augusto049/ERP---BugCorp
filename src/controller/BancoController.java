@@ -15,7 +15,7 @@ public class BancoController {
         this.bancoDAO = new BancoDAO();
     }
 
-    public void salvarBanco(String descricao, int saldoInicial) {
+    public void salvarBanco(String descricao, Double saldoInicial) {
     	Banco banco = new Banco();
     	banco.setDescricao(descricao.trim());
     	banco.setSaldo_Inicial(saldoInicial);
@@ -24,7 +24,7 @@ public class BancoController {
     	bancoDAO.inserir(banco);
     }
 
-    public void atualizarBanco(int id, String descricao, int saldoInicial) {
+    public void atualizarBanco(int id, String descricao, Double saldoInicial) {
     	Banco banco = new Banco();
     	banco.setId(id);
         banco.setDescricao(descricao.trim());

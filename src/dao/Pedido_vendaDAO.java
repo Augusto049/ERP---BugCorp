@@ -220,7 +220,7 @@ public class Pedido_vendaDAO {
 
     public List<Pessoa> listarVendedores() {
         List<Pessoa> lista = new ArrayList<>();
-        String sql = "SELECT * FROM pessoa WHERE tipo LIKE = '%Representante%'";
+        String sql = "SELECT * FROM pessoa WHERE tipo LIKE '%Representante%'";
 
         try (Connection con = ConnectionFactory.getConnection();
              PreparedStatement pst = con.prepareStatement(sql);

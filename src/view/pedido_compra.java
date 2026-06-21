@@ -42,19 +42,9 @@ public class pedido_compra extends JFrame {
     private static final Color VERDE_SUCESSO = new Color(39, 174, 96);
     private static final Color VERMELHO_PERIGO = new Color(231, 76, 60);
     
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                pedido_compra frame = new pedido_compra();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
     
-    public pedido_compra() {
-      
+    public pedido_compra(Usuario usuarioLogado) {
+    	this.usuarioLogado = usuarioLogado;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 779, 597);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);

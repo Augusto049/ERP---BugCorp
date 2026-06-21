@@ -100,4 +100,17 @@ public class EnderecamentoDAO {
         }
         return null;
     }
+    public boolean existeEndereco(String produto, String corredor, String prateleira, String setor) {
+        String sql = "SELECT 1 FROM enderecamento WHERE produto = ? AND corredor = ? AND prateleira = ? AND setor = ? LIMIT 1";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, produto);
+            stmt.setString(2, corredor);
+            stmt.setString(3, prateleira);
+            stmt.setString(4, setor);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (Exception e) { e.printStackTrace(); }
+        return false;
+    }
 }

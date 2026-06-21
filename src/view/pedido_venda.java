@@ -33,21 +33,12 @@ public class pedido_venda extends JFrame {
     private Pedido_vendaController controller = new Pedido_vendaController();
     private Usuario usuarioLogado;
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                pedido_venda frame = new pedido_venda();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
 
-    public pedido_venda() {
-   
+    public pedido_venda(Usuario usuario) {
+    	this.usuarioLogado = usuario;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setBounds(100, 100, 779, 597);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

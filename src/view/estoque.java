@@ -175,7 +175,7 @@ public class estoque extends JFrame {
         
         
         JLabel lblLogo = new JLabel("");
-		lblLogo.setBounds(10, 3, 51, 41);
+		lblLogo.setBounds(15, 17, 68, 53);
 		ImageIcon icon = new ImageIcon("img/logo.png");
 
         Image img = icon.getImage().getScaledInstance(

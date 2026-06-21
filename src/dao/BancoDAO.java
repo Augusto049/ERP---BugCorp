@@ -27,7 +27,7 @@ public class BancoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, banco.getDescricao());
-            stmt.setInt(2, banco.getSaldo_Inicial() );
+            stmt.setDouble(2, banco.getSaldo_Inicial() );
             stmt.executeUpdate();
             
 
@@ -43,7 +43,7 @@ public class BancoDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, banco.getDescricao());
-            stmt.setInt(2, banco.getSaldo_Inicial());
+            stmt.setDouble(2, banco.getSaldo_Inicial());
             stmt.setInt(3, id);
          
             stmt.executeUpdate();
@@ -79,7 +79,7 @@ public class BancoDAO {
             	Banco g = new Banco();
                 g.setId(rs.getInt("id"));
                 g.setDescricao(rs.getString("descricao"));
-                g.setSaldo_Inicial(rs.getInt("saldo_inicial"));
+                g.setSaldo_Inicial(rs.getDouble("saldo_inicial"));
                 lista.add(g);
             }
 
@@ -105,7 +105,7 @@ public class BancoDAO {
 
             if (rs.next()) {
             	Banco g = new Banco();
-            	g.setSaldo_Inicial(rs.getInt("Saldo_Inicial"));
+            	g.setSaldo_Inicial(rs.getDouble("Saldo_Inicial"));
             	g.setDescricao(rs.getString("descricao"));
             	g.setId(rs.getInt("id"));
                 return g;

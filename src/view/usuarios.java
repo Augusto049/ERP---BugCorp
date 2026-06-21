@@ -368,8 +368,10 @@ public class usuarios extends JFrame {
 		if (Nome.isEmpty() || Funcao.isEmpty() || Email.isEmpty() || CPF.isEmpty() || Grupo == null || Senha.isEmpty()) {
 			JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Preencha todos os campos!");
 			return;
+		} else if (!Email.contains("@") || !Email.contains(".com")) {
+			JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Digite um E-mail válido!");
+            return;
 		}
-
 		if (Senha.equals(ConfirmeSenha)) {
 			Usuario usuario = controller.salvarUsuario(Nome,Funcao,Grupo,Email,Senha,CPF);
 			enviarEmailCadastro(Email,Nome,Senha,Funcao);
@@ -395,14 +397,17 @@ public class usuarios extends JFrame {
 		if (Nome.isEmpty() || Funcao.isEmpty() || Email.isEmpty() || CPF.isEmpty() || Grupo == null) {
 			JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Preencha todos os campos!");
 			return;
-		}
+		} else if (!Email.contains("@") || !Email.contains(".")) {
+			  JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Digite um e-mail válido!");
+              return;
+		  } else {
 			controller.atualizarUsuario(idSelecionado,Nome,Funcao,Grupo,Email,CPF);
 			JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(contentPane), "Usuario atualizado!");
 			idSelecionado = 0;
 			limparCampos();
 			atualizarTabela();
 			cancelar();
-			
+		  }
 		
 	}
 	private void excluirUsuario() {

@@ -884,7 +884,7 @@ public class pessoa extends JFrame {
     
     }
     private void criarComponentes() {
-    	MenuGerais.aplicar(this, usuarioLogado);
+    	MenuGerais.criarMenu(this, usuarioLogado);
     	
     }
     

@@ -290,7 +290,7 @@ public class Inicio extends JFrame {
         
         txtUsuario.setText("augustoribeirorigon@gmail.com");
         txtSenha.setText("12345");
-        logar();
+        
     }
 
     private void estilizarCampo(JTextField campo, String titulo) {

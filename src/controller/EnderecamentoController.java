@@ -59,4 +59,8 @@ public class EnderecamentoController {
         }
         return dados;
     }
+    public boolean existeEndereco(String produto, String corredor, String prateleira, String setor) {
+        return enderecamentoDAO.existeEndereco(produto, corredor, prateleira, setor);
+    }
+
 }

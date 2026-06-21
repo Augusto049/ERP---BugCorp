@@ -2,7 +2,7 @@ package model;
 
 public class Banco {
 	private int id;
-	private int saldo_inicial;
+	private Double saldo_inicial;
 	private String descricao;
 	
 	public int getId() {
@@ -11,10 +11,10 @@ public class Banco {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getSaldo_Inicial() {
+	public Double getSaldo_Inicial() {
 		return saldo_inicial;
 	}
-	public void setSaldo_Inicial(int saldo_inicial) {
+	public void setSaldo_Inicial(Double saldo_inicial) {
 		this.saldo_inicial = saldo_inicial;
 	}
 	public String getDescricao() {

@@ -62,16 +62,6 @@ public class cadastro_notas_saida extends JFrame {
 	private int proximoNumeroNota = 000000001;
 	private int idSelecionado = 0; 
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(() -> {
-			try {
-				new cadastro_notas_saida().setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
-
 	public cadastro_notas_saida() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Cadastro de Nota de Saída");
@@ -462,13 +452,13 @@ public class cadastro_notas_saida extends JFrame {
 			int linha = tableProd.getSelectedRow();
 			idSelecionado = (int) tableProd.getValueAt(linha, 0);
 			Produto produto= produtoController.buscarProduto(idSelecionado);
-//			itensController.salvar(Integer.parseInt(
-//					tfNumeroNota.getText()), 
-//					produto,
-//					txtqntd.getText().trim(), 
-//					tfValUnit.getText().trim(),
-//					tfVT.getText().trim());
-			
+			itensController.salvar(Integer.parseInt(
+					tfNumeroNota.getText()), 
+					produto,
+					txtqntd.getText().trim(), 
+					tfValUnit.getText().trim(),
+					tfVT.getText().trim(),
+					tfPercDesc.getText().trim());	
 			atualizarTabelaItens();
 			recalcularValorTotal();
 			dialog.dispose();
@@ -500,7 +490,7 @@ public class cadastro_notas_saida extends JFrame {
 		DefaultTableModel model = (DefaultTableModel) tableItens.getModel();
 		for (int i = 0; i < model.getRowCount(); i++) {
 			try {
-				total += Double.parseDouble(model.getValueAt(i, 4).toString().replace(",", "."));
+				total += Double.parseDouble(model.getValueAt(i, 3).toString().replace(",", "."));
 			} catch (NumberFormatException ignored) {
 			}
 		}

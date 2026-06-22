@@ -159,7 +159,7 @@ public class home extends JFrame {
         painelCards.add(criarCard("Usuários", totalUsuarios));
         painelCards.add(criarCard("Bancos", totalBanco));
         painelCards.add(criarCard("Pessoas", totalPessoa));
-        painelCards.add(criarCard("Cadastros Hoje", "PENDENTE"));
+        painelCards.add(criarCard("Valor em Vendas", "PENDENTE"));
 
         centro.add(painelCards, BorderLayout.NORTH);
 

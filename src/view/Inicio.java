@@ -288,9 +288,6 @@ public class Inicio extends JFrame {
 
         card.add(lblRodape);
         
-        txtUsuario.setText("augustoribeirorigon@gmail.com");
-        txtSenha.setText("12345");
-        
     }
 
     private void estilizarCampo(JTextField campo, String titulo) {

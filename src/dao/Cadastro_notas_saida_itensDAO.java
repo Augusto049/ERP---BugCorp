@@ -21,7 +21,7 @@ public class Cadastro_notas_saida_itensDAO {
 
     public void inserir(Cadastro_notas_saida_itens item) {
         String sql = "INSERT INTO itens_nota_venda (id_nota, id_produto, quantidade, valor, valor_total, desconto)"
-                   + " VALUES (?,?,?,?,?)";
+                   + " VALUES (?,?,?,?,?,?)";
         try (Connection conn = initConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, item.getId_nota());
@@ -66,7 +66,7 @@ public class Cadastro_notas_saida_itensDAO {
 
     public List<Cadastro_notas_saida_itens> listarPorNota(int id_nota) {
         List<Cadastro_notas_saida_itens> lista = new ArrayList<>();
-        String sql = "SELECT * FROM itens_nota_venda WHERE id_nota=?";
+        String sql = "SELECT * FROM itens_nota_venda INNER JOIN produto ON produto.id = itens_nota_venda.id_produto WHERE id_nota=?";
         try (Connection conn = initConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id_nota);
@@ -76,11 +76,14 @@ public class Cadastro_notas_saida_itensDAO {
                 Produto p = new Produto();
            
                 p.setId(rs.getInt("id_produto"));
+                p.setNome(rs.getString("nome"));
+                
                 g.setId(rs.getInt("id"));
                 g.setId_nota(rs.getInt("id_nota"));
                 g.setId_produto(p);
                 g.setQuantidade(rs.getString("quantidade"));
-                g.setValor_total(rs.getString("valor"));
+                g.setValor(rs.getString("valor"));
+                g.setValor_total(rs.getString("valor_total"));
                 lista.add(g);
             }
         } catch (Exception e) {

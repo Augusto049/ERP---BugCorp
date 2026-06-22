@@ -50,8 +50,10 @@ public class Cadastro_notas_saida_itensController {
         List<Object[]> dados = new java.util.ArrayList<>();
         for (Cadastro_notas_saida_itens e : dao.listarPorNota(id_nota)) {
             dados.add(new Object[]{
-                e.getId(), e.getId_nota(), e.getId_produto(),
-                e.getQuantidade(), e.getValor_total()
+            		e.getId_produto().getNome(),
+            		e.getQuantidade(), 
+            		e.getValor(), 
+            		e.getValor_total()
             });
         }
         return dados;

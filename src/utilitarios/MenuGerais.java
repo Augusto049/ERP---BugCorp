@@ -18,11 +18,13 @@ import view.grupo;
 import view.enderecamento;
 import view.forma_pagamento;
 import view.pessoa;
+import view.EmBreve;
 import view.banco;
 import view.produto;
 import view.condicao_pagamento;
 import view.estoque;
 import view.notas_saida;
+import view.novidades;
 import view.pedido_compra;
 import view.pedido_venda;
 import view.locais;
@@ -124,12 +126,12 @@ public class MenuGerais {
          JMenuItem itemNovo = new JMenuItem("Novidades");
          itemNovo.addActionListener(e -> {
              telaAtual.dispose();
-//             new notas_saida(usuarioLogado).setVisible(true);
+             new novidades(usuarioLogado).setVisible(true);
          });
          JMenuItem itemBreve = new JMenuItem("Em Breve");
          itemBreve.addActionListener(e -> {
              telaAtual.dispose();
-//             new notas_saida(usuarioLogado).setVisible(true);
+             new EmBreve(usuarioLogado).setVisible(true);
          });
          JMenuItem itemPedidoVenda = new JMenuItem("Pedidos de Venda");
          itemPedidoVenda.addActionListener(e -> {
